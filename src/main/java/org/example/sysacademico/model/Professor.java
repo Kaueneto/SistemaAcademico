@@ -1,17 +1,25 @@
 package org.example.sysacademico.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.*;
+import lombok.*;
 
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "professores")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Professor {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
+
     private String email;
+
     private String formacao;
-
-    private Set<Disciplina> disciplinas = new HashSet<>();
-
 }

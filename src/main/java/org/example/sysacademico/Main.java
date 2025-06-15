@@ -9,7 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.example.sysacademico.utils.JPAUtil;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -25,7 +25,7 @@ public class HelloApplication extends Application {
 
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/org/example/sysacademico/hello-view.fxml"));
+                getClass().getResource("/org/example/sysacademico/Menu.fxml"));
         Scene scene = new Scene(loader.load(), 400, 300);
 
         stage.setTitle("SysAcadêmico");

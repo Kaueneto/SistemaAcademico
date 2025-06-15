@@ -4,6 +4,8 @@
     <persistence-unit name="SysAcademicoPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <class>org.example.sysacademico.model.Aluno</class>
+
         <class>org.example.sysacademico.model.Curso</class>
         <class>org.example.sysacademico.model.Disciplina</class>
         <class>org.example.sysacademico.model.Professor</class>
@@ -16,7 +18,7 @@
             <property name="jakarta.persistence.jdbc.password" value="postgres"/>
 
             <property name="hibernate.dialect"      value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql"              value="true"/>
             <property name="hibernate.format_sql"            value="true"/>
         </properties>
