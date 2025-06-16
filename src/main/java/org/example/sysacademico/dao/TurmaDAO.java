@@ -2,45 +2,38 @@ package org.example.sysacademico.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.example.sysacademico.model.Professor;
+import org.example.sysacademico.model.Turma;
 import org.example.sysacademico.utils.JPAUtil;
 
 import java.util.List;
 
-public class ProfessorDAO {
+public class TurmaDAO {
 
-    public void create(Professor p) {
-        trans(em -> em.persist(p));
-    }
-    public void update(Professor p) {
-        trans(em -> em.merge(p));
+    public void create(Turma t) {
+        trans(em -> em.persist(t));
     }
 
-
-    public void delete(Professor p) {
-        trans(em -> em.remove(em.contains(p) ? p : em.merge(p)));
+    public void update(Turma t) {
+        trans(em -> em.merge(t));
     }
 
+    public void delete(Turma t) {
+        trans(em -> em.remove(em.contains(t) ? t : em.merge(t)));
+    }
 
-    public Professor findById(Long id) {
+    public Turma findById(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try { return em.find(Turma.class, id); }
+        finally { em.close(); }
+    }
+
+    public List<Turma> findAll() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.find(Professor.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-
-    public List<Professor> findAll() {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            TypedQuery<Professor> q =
-                    em.createQuery("SELECT p FROM Professor p", Professor.class);
+            TypedQuery<Turma> q =
+                    em.createQuery("SELECT t FROM Turma t", Turma.class);
             return q.getResultList();
-        } finally {
-            em.close();
-        }
+        } finally { em.close(); }
     }
 
     private void trans(java.util.function.Consumer<EntityManager> action) {

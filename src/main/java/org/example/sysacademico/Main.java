@@ -26,7 +26,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/org/example/sysacademico/Menu.fxml"));
-        Scene scene = new Scene(loader.load(), 400, 300);
+        Scene scene = new Scene(loader.load(), 569, 363);
 
         stage.setTitle("SysAcadêmico");
         stage.setScene(scene);

@@ -12,7 +12,9 @@ module org.example.sysacademico {
     requires java.sql;
 
     requires static lombok;
+    requires java.desktop;
 
+    opens org.example.sysacademico.controller to javafx.fxml;
     opens org.example.sysacademico.model to org.hibernate.orm.core, jakarta.persistence;
 
     opens org.example.sysacademico to javafx.fxml;
