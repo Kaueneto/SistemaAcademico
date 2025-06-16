@@ -32,6 +32,6 @@
       </TableView>
       <Button fx:id="btnEditar" layoutX="96.0" layoutY="344.0" mnemonicParsing="false" onAction="#onEditar" prefHeight="25.0" prefWidth="71.0" text="Editar" />
       <Button fx:id="btnAtualizar" layoutX="29.0" layoutY="149.0" mnemonicParsing="false" onAction="#onAtualizar" prefHeight="25.0" prefWidth="71.0" text="Atualizar" />
-      <Button fx:id="btnFechar" layoutX="256.0" layoutY="344.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Fechar" />
+      <Button fx:id="BTNfechar" layoutX="256.0" layoutY="344.0" mnemonicParsing="false" onAction="#onFechar" prefHeight="25.0" prefWidth="71.0" text="Fechar" />
    </children>
 </AnchorPane>

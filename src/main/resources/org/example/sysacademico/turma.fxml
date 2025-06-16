@@ -34,7 +34,7 @@
       </TableView>
       <Button fx:id="btneditar" layoutX="104.0" layoutY="381.0" mnemonicParsing="false" onAction="#onEditar" prefHeight="25.0" prefWidth="71.0" text="Editar" />
       <Button fx:id="btnatualizar" layoutX="309.0" layoutY="174.0" mnemonicParsing="false" onAction="#onAtualizar" prefHeight="25.0" prefWidth="71.0" text="Atualizar" />
-      <Button fx:id="btnFechar" layoutX="402.0" layoutY="381.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Fechar" />
+      <Button fx:id="btnFechar" layoutX="402.0" layoutY="381.0" mnemonicParsing="false" onAction="#onFechar" prefHeight="25.0" prefWidth="71.0" text="Fechar" />
       <ComboBox fx:id="cboxProf" layoutX="194.0" layoutY="66.0" prefHeight="25.0" prefWidth="256.0" />
       <Text layoutX="194.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Professor" />
       <TextField fx:id="txtHorario" layoutX="29.0" layoutY="150.0" prefHeight="25.0" prefWidth="148.0" />

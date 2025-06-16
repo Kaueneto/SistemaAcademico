@@ -3,6 +3,7 @@ package org.example.sysacademico.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.sysacademico.model.Disciplina;
@@ -230,5 +231,9 @@ public class TurmaController {
     private void alert(String msg, Alert.AlertType type) {
         Alert alert = new Alert(type, msg);
         alert.showAndWait();
+    }
+    @FXML
+    private void onFechar(ActionEvent e) {
+        btnFechar.getScene().getWindow().hide();
     }
 }

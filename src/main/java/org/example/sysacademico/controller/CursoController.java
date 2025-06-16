@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import org.example.sysacademico.dao.CursoDAO;
 import org.example.sysacademico.model.Curso;
 
+import java.awt.event.ActionEvent;
+
 public class CursoController {
 
     @FXML private TextField txtNome;
@@ -21,7 +23,7 @@ public class CursoController {
     @FXML private Button btnEditar;
     @FXML private Button btnAtualizar;
     @FXML private Button btnExcluir;
-    @FXML private Button btnFechar;
+    @FXML private Button BTNfechar;
 
     private final CursoDAO dao = new CursoDAO();
     private final ObservableList<Curso> lista = FXCollections.observableArrayList();
@@ -152,6 +154,11 @@ public class CursoController {
         txtNome.setDisable(false);
         txtCargaHoraria.setDisable(false);
     }
+    @FXML
+    private void onFechar(ActionEvent e) {
+        BTNfechar.getScene().getWindow().hide();
+    }
+
 
     private void alert(String msg) {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();

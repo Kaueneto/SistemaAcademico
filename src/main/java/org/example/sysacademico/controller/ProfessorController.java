@@ -20,9 +20,9 @@ public class ProfessorController {
     @FXML private TableColumn<Professor, String> colFormacao;
     @FXML private Button btnSalvar;
     @FXML private Button btnExcluir;
+    @FXML private Button btnEditar;
     @FXML private Button btnAtualizar;
     @FXML private Button btnFechar;
-
 
     private final ObservableList<Professor> lista = FXCollections.observableArrayList();
     private final ProfessorDAO dao = new ProfessorDAO();
@@ -30,16 +30,18 @@ public class ProfessorController {
 
     @FXML
     private void initialize() {
-        colId       .setCellValueFactory(c -> c.getValue().idProperty().asObject());
-        colNome     .setCellValueFactory(c -> c.getValue().nomeProperty());
-        colEmail    .setCellValueFactory(c -> c.getValue().emailProperty());
-        colFormacao .setCellValueFactory(c -> c.getValue().formacaoProperty());
+        colId      .setCellValueFactory(c -> c.getValue().idProperty().asObject());
+        colNome    .setCellValueFactory(c -> c.getValue().nomeProperty());
+        colEmail   .setCellValueFactory(c -> c.getValue().emailProperty());
+        colFormacao.setCellValueFactory(c -> c.getValue().formacaoProperty());
+
+        btnAtualizar.setDisable(true);
 
         atualizarTabela();
 
         tblProfessor.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((obs, oldSel, newSel) -> preencherForm(newSel));
+                .addListener((obs, oldSel, newSel) -> selecionado = newSel);
     }
 
     @FXML
@@ -47,21 +49,13 @@ public class ProfessorController {
         if (!validar()) return;
 
         try {
-            if (selecionado == null) {
-                Professor p = new Professor();
-                p.setNome(txtNome.getText());
-                p.setEmail(txtEmail.getText());
-                p.setFormacao(txtFormacao.getText());
+            Professor p = new Professor();
+            p.setNome(txtNome.getText());
+            p.setEmail(txtEmail.getText());
+            p.setFormacao(txtFormacao.getText());
 
-                dao.create(p);
-                info("Professor cadastrado!");
-            } else {
-                selecionado.setNome(txtNome.getText());
-                selecionado.setEmail(txtEmail.getText());
-                selecionado.setFormacao(txtFormacao.getText());
-                dao.update(selecionado);
-                info("Professor atualizado!");
-            }
+            dao.create(p);
+            info("Professor cadastrado!");
             atualizarTabela();
             limparForm();
         } catch (Exception ex) {
@@ -71,8 +65,35 @@ public class ProfessorController {
 
     @FXML
     private void onEditar(ActionEvent e) {
-        if (selecionado == null)
+        if (selecionado == null) {
             warn("Selecione um professor para editar.");
+            return;
+        }
+        preencherForm(selecionado);
+        btnSalvar.setDisable(true);
+        btnAtualizar.setDisable(false);
+    }
+
+    @FXML
+    private void onAtualizar(ActionEvent e) {
+        if (selecionado == null) {
+            warn("Nenhum professor selecionado para atualizar.");
+            return;
+        }
+        if (!validar()) return;
+
+        try {
+            selecionado.setNome(txtNome.getText());
+            selecionado.setEmail(txtEmail.getText());
+            selecionado.setFormacao(txtFormacao.getText());
+            dao.update(selecionado);
+
+            info("Professor atualizado!");
+            atualizarTabela();
+            limparForm();
+        } catch (Exception ex) {
+            erro(ex);
+        }
     }
 
     @FXML
@@ -81,20 +102,25 @@ public class ProfessorController {
             warn("Selecione um professor para excluir.");
             return;
         }
-        if (confirmar("Confirma a exclusão?")) {
-            try {
-                dao.delete(selecionado);
-                atualizarTabela();
-                limparForm();
-                info("Excluído com sucesso.");
-            } catch (Exception ex) {
+
+        try {
+            dao.delete(selecionado);
+        } catch (Exception ex) {
+            if (isForeignKeyViolation(ex)) {
+                erro(new Exception("Não é possível excluir este registro, pois ele está associado a outros dados no sistema."));
+                return;
+            } else {
                 erro(ex);
+                return;
             }
         }
-    }
 
-    @FXML
-    private void onAtualizar(ActionEvent e) { atualizarTabela(); }
+        if (confirmar("Confirma a exclusão?")) {
+            atualizarTabela();
+            limparForm();
+            info("Excluído com sucesso.");
+        }
+    }
 
     @FXML
     private void onFechar(ActionEvent e) {
@@ -107,14 +133,9 @@ public class ProfessorController {
     }
 
     private void preencherForm(Professor p) {
-        selecionado = p;
-        if (p != null) {
-            txtNome     .setText(p.getNome());
-            txtEmail    .setText(p.getEmail());
-            txtFormacao .setText(p.getFormacao());
-        } else {
-            limparForm();
-        }
+        txtNome.setText(p.getNome());
+        txtEmail.setText(p.getEmail());
+        txtFormacao.setText(p.getFormacao());
     }
 
     private void limparForm() {
@@ -123,6 +144,9 @@ public class ProfessorController {
         txtFormacao.clear();
         tblProfessor.getSelectionModel().clearSelection();
         selecionado = null;
+
+        btnSalvar.setDisable(false);
+        btnAtualizar.setDisable(true);
     }
 
     private boolean validar() {
@@ -135,18 +159,35 @@ public class ProfessorController {
         return true;
     }
 
-
     private void info(String msg) { alert(Alert.AlertType.INFORMATION, msg); }
-    private void warn(String msg) { alert(Alert.AlertType.WARNING,    msg); }
+    private void warn(String msg) { alert(Alert.AlertType.WARNING, msg); }
     private void erro(Exception ex) {
-        alert(Alert.AlertType.ERROR, ex.getMessage() == null ?
-                ex.toString() : ex.getMessage());
+        String msg = ex.getMessage() != null ? ex.getMessage() : ex.toString();
+        alert(Alert.AlertType.ERROR, msg);
     }
+
+    private boolean isForeignKeyViolation(Exception ex) {
+        Throwable t = ex;
+        while (t != null) {
+            String msg = t.getMessage();
+            if (msg != null) {
+                String lower = msg.toLowerCase();
+                if (lower.contains("sqlstate 23503") ||
+                        lower.contains("violates foreign key") ||
+                        lower.contains("constraintviolationexception")) {
+                    return true;
+                }
+            }
+            t = t.getCause();
+        }
+        return false;
+    }
+
     private boolean confirmar(String msg) {
-        Alert a = new Alert(Alert.AlertType.CONFIRMATION, msg,
-                ButtonType.OK, ButtonType.CANCEL);
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, msg, ButtonType.OK, ButtonType.CANCEL);
         return a.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
+
     private void alert(Alert.AlertType tipo, String msg) {
         Alert a = new Alert(tipo, msg, ButtonType.OK);
         a.setHeaderText(null);

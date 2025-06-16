@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="363.0" prefWidth="569.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sysacademico.controller.MenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="371.0" prefWidth="569.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sysacademico.controller.MenuController">
    <children>
       <MenuBar fx:id="txtmenubar" layoutY="2.0" prefHeight="25.0" prefWidth="569.0">
         <menus>
@@ -21,31 +21,26 @@
                   <MenuItem fx:id="itemTurma" mnemonicParsing="false" onAction="#abrirTurmas" text="Turmas" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Ajuda">
+          <Menu fx:id="menuAjuda" mnemonicParsing="false" text="Ajuda">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="Geral" mnemonicParsing="false" onAction="#onAjuda" text="Geral" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <ImageView fitHeight="200.0" fitWidth="191.0" layoutX="321.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+      <ImageView fitHeight="200.0" fitWidth="191.0" layoutX="182.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true" smooth="false">
          <image>
-            <Image url="@../../../../../../image.png" />
+            <Image url="@../../../image.png" />
          </image>
       </ImageView>
-      <Label layoutX="130.0" layoutY="63.0" prefHeight="38.0" prefWidth="350.0" text="Sistema de Gestão Acadêmica">
+      <Label layoutX="110.0" layoutY="27.0" prefHeight="38.0" prefWidth="350.0" text="Sistema de Gestão Acadêmica">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Label layoutX="23.0" layoutY="36.0" text="Bem vindo">
+      <Label layoutX="14.0" layoutY="65.0" text="Bem vindo! Selecione uma opção no menu acima">
          <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="23.0" layoutY="113.0" text="Selecione uma opção no menu acima">
-         <font>
-            <Font size="13.0" />
+            <Font size="14.0" />
          </font>
       </Label>
    </children>

@@ -28,7 +28,7 @@ public class Main extends Application {
                 getClass().getResource("/org/example/sysacademico/Menu.fxml"));
         Scene scene = new Scene(loader.load(), 569, 363);
 
-        stage.setTitle("SysAcadêmico");
+
         stage.setScene(scene);
         stage.show();
     }

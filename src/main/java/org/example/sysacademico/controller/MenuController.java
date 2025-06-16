@@ -1,5 +1,6 @@
 package org.example.sysacademico.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,13 +15,14 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML private Menu menuCadastros;
-    @FXML private MenuBar menuAjuda;
-
     @FXML private MenuItem itemProfessor;
     @FXML private MenuItem itemCurso;
     @FXML private MenuItem itemDisciplinas;
-
     @FXML private MenuItem itemTurma;
+
+    @FXML private Menu menuAjuda;
+
+    @FXML private MenuItem Geral;
 
     @FXML
     private void abrirProfessores() {
@@ -49,6 +51,30 @@ public class MenuController {
         a.setHeaderText("Sistema de Gestão Acadêmica");
         a.setContentText("Versão 1.0\nDesenvolvido para a disciplina de POO.");
         a.showAndWait();
+    }
+
+    @FXML
+    private void onAjuda(ActionEvent e) {
+        String mensagem = """
+            Sistema Acadêmico 
+            
+            Desenvolvido por:
+            - Kauê Cardoso
+
+            Tecnologias utilizadas:
+            - Java 17
+            - JavaFX 22
+            - Hibernate/JPA
+            - PostgreSQL
+        
+            Suporte: Kauê Cardoso
+            """;
+
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("Sobre o Sistema");
+        alerta.setHeaderText("Informações do Sistema");
+        alerta.setContentText(mensagem);
+        alerta.showAndWait();
     }
 
 
