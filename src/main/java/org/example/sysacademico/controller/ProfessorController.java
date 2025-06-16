@@ -43,7 +43,6 @@ public class ProfessorController {
                 .selectedItemProperty()
                 .addListener((obs, oldSel, newSel) -> selecionado = newSel);
     }
-
     @FXML
     private void onSalvar(ActionEvent e) {
         if (!validar()) return;
@@ -54,13 +53,15 @@ public class ProfessorController {
             p.setEmail(txtEmail.getText());
             p.setFormacao(txtFormacao.getText());
 
+            atualizarTabela();
             dao.create(p);
             info("Professor cadastrado!");
-            atualizarTabela();
+
             limparForm();
         } catch (Exception ex) {
             erro(ex);
         }
+
     }
 
     @FXML
@@ -130,6 +131,8 @@ public class ProfessorController {
     private void atualizarTabela() {
         lista.setAll(dao.findAll());
         tblProfessor.setItems(lista);
+        tblProfessor.refresh();
+
     }
 
     private void preencherForm(Professor p) {

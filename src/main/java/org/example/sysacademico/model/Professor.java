@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-import org.example.sysacademico.model.Disciplina;
 
 import java.util.HashSet;
 import java.util.Set;

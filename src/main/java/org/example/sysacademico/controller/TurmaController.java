@@ -71,6 +71,7 @@ public class TurmaController {
         });
 
         carregarTabela();
+        btnatualizar.setDisable(true);
 
     }
 
