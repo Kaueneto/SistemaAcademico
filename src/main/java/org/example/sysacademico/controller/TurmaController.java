@@ -100,6 +100,7 @@ public class TurmaController {
 
         preencherForm(selecionada);
         liberarEdicao();
+
     }
 
     @FXML
@@ -218,6 +219,7 @@ public class TurmaController {
         txtHorario.setDisable(true);
         cboxDisciplina.setDisable(true);
         cboxProf.setDisable(true);
+        tblTurma.setDisable(false);
     }
 
     private void liberarEdicao() {
@@ -227,6 +229,7 @@ public class TurmaController {
         txtHorario.setDisable(false);
         cboxDisciplina.setDisable(false);
         cboxProf.setDisable(false);
+        tblTurma.setDisable(true);
     }
 
     private void alert(String msg, Alert.AlertType type) {
