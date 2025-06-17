@@ -117,7 +117,7 @@ public class DisciplinaController {
         } catch (RuntimeException e) {
             System.out.println("Erro ao excluir disciplina: " + e.getMessage());
             e.printStackTrace();
-            alert("Erro ao excluir disciplina: " + e.getMessage());
+            alert("Erro ao excluir disciplina pois ela esta associada a outros dados na tabela " );
         }
     }
 

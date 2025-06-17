@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import org.example.sysacademico.dao.ProfessorDAO;
 import org.example.sysacademico.model.Professor;
 
+import java.util.regex.Pattern;
+
 public class ProfessorController {
 
     @FXML private TextField txtNome;
@@ -152,16 +154,30 @@ public class ProfessorController {
         btnAtualizar.setDisable(true);
     }
 
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    );
+
+    private boolean emailValido(String email) {
+        return EMAIL_PATTERN.matcher(email).matches();
+    }
+
     private boolean validar() {
-        if (txtNome.getText().isBlank() ||
-                txtEmail.getText().isBlank() ||
-                txtFormacao.getText().isBlank()) {
-            warn("Preencha todos os campos.");
+        String nome  = txtNome.getText();
+        String email  = txtEmail.getText();
+        String formacao = txtFormacao.getText();
+
+        if (nome.isBlank() || email.isBlank() || formacao.isBlank()) {
+            warn("é necessário preencher todos os campos.");
+            return false;
+        }
+        if (!emailValido(email)) {
+            warn("Informe um e-mail válido.");
+            txtEmail.requestFocus();
             return false;
         }
         return true;
     }
-
     private void info(String msg) { alert(Alert.AlertType.INFORMATION, msg); }
     private void warn(String msg) { alert(Alert.AlertType.WARNING, msg); }
     private void erro(Exception ex) {

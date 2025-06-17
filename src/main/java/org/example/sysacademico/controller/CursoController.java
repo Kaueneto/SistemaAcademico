@@ -85,21 +85,54 @@ public class CursoController {
         bloquearEdicao();
     }
 
+// ===== CursoController.java =====
+
+// ...
 
     @FXML
     private void onExcluir() {
         Curso alvo = tblCurso.getSelectionModel().getSelectedItem();
         if (alvo == null) {
-            alert("Selecione um curso para excluir.");
+            alert("Selecione um curso pra exclusao.");
             return;
         }
 
-        System.out.println("Excluindo curso: " + alvo);
-        dao.delete(alvo);
-        carregarTabela();
-        limparForm();
-        bloquearEdicao();
+        try {
+            dao.delete(alvo);
+            carregarTabela();
+            limparForm();
+            bloquearEdicao();
+            alert("Curso excluido com sucesso.");
+        } catch (Exception ex) {
+            if (isForeignKeyViolation(ex)) {
+                alert("Não é possível excluir este curso, pois ele está associado a outras tabelas.");
+            } else {
+                alert("Erro ao excluir curso: " + ex.getMessage());
+            }
+            ex.printStackTrace();
+        }
     }
+
+    /** Detecta violação de chave estrangeira (PostgreSQL SQLState 23503 ou texto-chave) */
+    private boolean isForeignKeyViolation(Exception ex) {
+        Throwable t = ex;
+        while (t != null) {
+            String msg = t.getMessage();
+            if (msg != null) {
+                String lower = msg.toLowerCase();
+                if (lower.contains("sqlstate 23503") ||
+                        lower.contains("violates foreign key") ||
+                        lower.contains("constraintviolationexception")) {
+                    return true;
+                }
+            }
+            t = t.getCause();
+        }
+        return false;
+    }
+
+// ...
+
 
     @FXML
     private void onFechar() {
