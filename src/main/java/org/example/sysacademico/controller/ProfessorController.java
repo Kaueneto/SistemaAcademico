@@ -1,5 +1,6 @@
 package org.example.sysacademico.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +24,6 @@ public class ProfessorController {
     @FXML private Button btnEditar;
     @FXML private Button btnAtualizar;
     @FXML private Button btnFechar;
-
     private final ObservableList<Professor> lista = FXCollections.observableArrayList();
     private final ProfessorDAO dao = new ProfessorDAO();
     private Professor selecionado;
@@ -37,12 +37,14 @@ public class ProfessorController {
 
         btnAtualizar.setDisable(true);
 
-        atualizarTabela();
+        tblProfessor.setItems(lista); // *** NOVO: bind uma vez só
+        atualizarTabela(); // *** NOVO: popula logo após o bind
 
         tblProfessor.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldSel, newSel) -> selecionado = newSel);
     }
+
     @FXML
     private void onSalvar(ActionEvent e) {
         if (!validar()) return;
@@ -53,15 +55,13 @@ public class ProfessorController {
             p.setEmail(txtEmail.getText());
             p.setFormacao(txtFormacao.getText());
 
-            atualizarTabela();
             dao.create(p);
             info("Professor cadastrado!");
-
+            atualizarTabela();
             limparForm();
         } catch (Exception ex) {
             erro(ex);
         }
-
     }
 
     @FXML
@@ -104,22 +104,19 @@ public class ProfessorController {
             return;
         }
 
+        if (!confirmar("Confirma a exclusão?")) return; // *** ALTERADO: confirma antes de excluir
+
         try {
             dao.delete(selecionado);
-        } catch (Exception ex) {
-            if (isForeignKeyViolation(ex)) {
-                erro(new Exception("Não é possível excluir este registro, pois ele está associado a outros dados no sistema."));
-                return;
-            } else {
-                erro(ex);
-                return;
-            }
-        }
-
-        if (confirmar("Confirma a exclusão?")) {
             atualizarTabela();
             limparForm();
             info("Excluído com sucesso.");
+        } catch (Exception ex) {
+            if (isForeignKeyViolation(ex)) {
+                erro(new Exception("Não é possível excluir este registro, pois ele está associado a outros dados no sistema."));
+            } else {
+                erro(ex);
+            }
         }
     }
 
@@ -129,10 +126,13 @@ public class ProfessorController {
     }
 
     private void atualizarTabela() {
-        lista.setAll(dao.findAll());
-        tblProfessor.setItems(lista);
-        tblProfessor.refresh();
-
+        var professores = dao.findAll();
+        System.out.println("Professores retornados: " + professores); // Log para debug
+        lista.setAll(professores);
+        Platform.runLater(() -> {
+            tblProfessor.refresh();
+            System.out.println("Tabela atualizada com " + lista.size() + " registros.");
+        });
     }
 
     private void preencherForm(Professor p) {

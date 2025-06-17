@@ -1,6 +1,5 @@
 package org.example.sysacademico.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +9,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -29,7 +29,6 @@ public class Professor {
     @ManyToMany(mappedBy = "professores")
     private Set<Disciplina> disciplinas = new HashSet<>();
 
-    // Para TableView do JavaFX (propriedades observáveis)
     public SimpleLongProperty idProperty() {
         return new SimpleLongProperty(id);
     }
@@ -49,5 +48,22 @@ public class Professor {
     @Override
     public String toString() {
         return nome; // útil em ComboBox
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Professor professor = (Professor) o;
+        return Objects.equals(id, professor.id);
+    }
+
+
+
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
